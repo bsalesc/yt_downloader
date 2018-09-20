@@ -1,0 +1,16 @@
+{
+  "name": "downloader",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "tslint": "yarn tslint:server",
+    "tslint:server": "./node_modules/.bin/tslint --project ./server"
+  },
+  "devDependencies": {
+    "prettier": "^1.14.2",
+    "prettier-tslint": "^0.4.0",
+    "tslint": "^5.11.0",
+    "typescript": "^3.0.1"
+  }
+}
