@@ -1,7 +1,10 @@
+import * as path from 'path';
 import * as ytdl from 'ytdl-core';
+
 import { PassThrough } from 'stream';
 import { VideoInterface } from '../types/video.interface';
 import streamUtil from '../utils/stream.util';
+import { createWriteStream } from 'fs';
 
 const url = 'https://www.youtube.com/watch?v=';
 
@@ -33,9 +36,13 @@ const downloadVideos = (videos: VideoInterface[]) => {
   return output;
 };
 
+const saveVideos = () =>
+  createWriteStream(path.join(__dirname, '../../downloads/', 'video.mp4'));
+
 const downloaderService = {
   getNames,
   downloadVideos,
+  saveVideos,
 };
 
 export default downloaderService;
