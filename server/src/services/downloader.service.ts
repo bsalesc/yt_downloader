@@ -1,48 +1,48 @@
-import * as path from 'path';
 import * as ytdl from 'ytdl-core';
 
-import { PassThrough } from 'stream';
-import { VideoInterface } from '../types/video.interface';
-import streamUtil from '../utils/stream.util';
-import { createWriteStream } from 'fs';
+import { IMedia } from '../types/media.interface';
+import { WriteStream } from 'fs';
+import { Extension } from '../types/media.types';
+import {
+  buildFileName,
+  buildStream,
+  filterNewMedias,
+  buildWriteStream,
+} from './file.service';
 
-const url = 'https://www.youtube.com/watch?v=';
-
-const getNames = async (ids: string[]) => {
-  const infos = await Promise.all(ids.map(id => ytdl.getInfo(url + id)));
+export const getDetails = async (
+  urls: string[],
+  extension: string = Extension.MP4,
+) => {
+  const infos = await Promise.all(urls.map(url => ytdl.getInfo(url)));
 
   return infos.map(
-    ({ title, video_id }): VideoInterface => ({
+    ({ title, video_id, video_url: url }): IMedia => ({
       title,
-      filename: title.replace(' ', '_').toLocaleLowerCase(),
       video_id,
+      url,
+      filename: buildFileName(title, extension),
+      filenameInternal: buildFileName(video_id, extension),
     }),
   );
 };
 
-const downloadVideos = (videos: VideoInterface[]) => {
-  const output = new PassThrough({ objectMode: false });
+const buildYoutubeStream = media => ({
+  ...media,
+  stream: buildStream(media.url, ytdl, { filter: 'audio' }),
+});
 
-  videos.map(video =>
-    streamUtil
-      .createStream(
-        ytdl(url + video.video_id, {
-          filter: format => format.container === 'mp4',
-        }),
-      )
-      .pipe(output),
+export const buildYoutubeStreams = (medias: IMedia[]) =>
+  medias.map(buildYoutubeStream);
+
+const saveMedia = (media: IMedia) => media.stream.pipe(buildWriteStream(media));
+
+const createPromise = (stream: WriteStream): Promise<WriteStream> =>
+  new Promise(resolve => stream.on('finish', () => resolve(stream)));
+
+export const saveMedias = async (medias: IMedia[]): Promise<WriteStream[]> => {
+  medias = await filterNewMedias(medias);
+  return await Promise.all<WriteStream>(
+    medias.map(saveMedia).map(createPromise),
   );
-
-  return output;
 };
-
-const saveVideos = () =>
-  createWriteStream(path.join(__dirname, '../../downloads/', 'video.mp4'));
-
-const downloaderService = {
-  getNames,
-  downloadVideos,
-  saveVideos,
-};
-
-export default downloaderService;

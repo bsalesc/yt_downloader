@@ -1,13 +1,11 @@
 import { Application, Router } from 'express';
 
-import downloadController from '../controllers/download.controller';
+import { download } from '../controllers/download.controller';
 
-const downloadRouter = (app: Application) => {
+export const downloadRouter = (app: Application) => {
   const router = Router();
 
-  router.post('/', downloadController.getTitle);
+  router.post('/:extension', download);
 
   app.use('/download', router);
 };
-
-export default downloadRouter;

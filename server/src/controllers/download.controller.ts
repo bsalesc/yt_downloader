@@ -1,23 +1,31 @@
 import { Request, Response } from 'express';
-import downloaderService from '../services/downloader.service';
-import { WriteStream } from 'fs';
+import {
+  buildYoutubeStreams,
+  getDetails,
+  saveMedias,
+} from '../services/downloader.service';
+import { convert } from '../services/convert.service';
+import { compressMedias } from '../services/file.service';
 
-const getTitle = async (req: Request, res: Response) => {
-  const ids = req.body;
+import { Extension } from '../types/media.types';
+
+export const download = async (req: Request, res: Response) => {
+  const { extension: extensionValue } = req.params;
+  const urls = req.body;
+
+  const extension = Extension[extensionValue.toUpperCase()];
+
   try {
-    const videos = await downloaderService.getNames(ids);
-    const stream = downloaderService.downloadVideos(videos);
-    let writeStream: WriteStream = null;
-    stream.pipe((writeStream = downloaderService.saveVideos()));
+    if (!extension) throw Error('Invalid extension');
 
-    res.status(200).json(videos.map(video => video.title));
+    let medias = await getDetails(urls);
+    await saveMedias(buildYoutubeStreams(medias));
+    medias = await convert(medias, extension);
+    const compressedFile = await compressMedias(medias);
+
+    compressedFile.on('end', () => res.end());
+    compressedFile.pipe(res);
   } catch (e) {
-    res.status(400).json(e.message);
+    res.status(400).json({ message: e.message });
   }
 };
-
-const downloadController = {
-  getTitle,
-};
-
-export default downloadController;
