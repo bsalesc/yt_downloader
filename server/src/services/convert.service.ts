@@ -39,7 +39,7 @@ const renameMediaToMp3 = media => ({
   filenameInternal: media.filenameInternal.replace('.mp4', '.mp3'),
 });
 
-export const convert = async (medias: IMedia[], extension: string) => {
+export const convert = (extension: string) => async (medias: IMedia[]) => {
   let mediasConverted = [...medias];
   switch (extension) {
     case Extension.MP3:

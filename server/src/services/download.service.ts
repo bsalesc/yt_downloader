@@ -1,14 +1,15 @@
 import * as ytdl from 'ytdl-core';
 
 import { IMedia } from '../types/media.interface';
-import { WriteStream } from 'fs';
 import { Extension } from '../types/media.types';
 import {
   buildFileName,
   buildStream,
-  filterNewMedias,
-  buildWriteStream,
+  saveMedias,
+  compressMedias,
 } from './file.service';
+import { convert } from './convert.service';
+import pipeline from '../utils/pipeline.utils';
 
 export const getDetails = async (
   urls: string[],
@@ -35,14 +36,11 @@ const buildYoutubeStream = media => ({
 export const buildYoutubeStreams = (medias: IMedia[]) =>
   medias.map(buildYoutubeStream);
 
-const saveMedia = (media: IMedia) => media.stream.pipe(buildWriteStream(media));
-
-const createPromise = (stream: WriteStream): Promise<WriteStream> =>
-  new Promise(resolve => stream.on('finish', () => resolve(stream)));
-
-export const saveMedias = async (medias: IMedia[]): Promise<WriteStream[]> => {
-  medias = await filterNewMedias(medias);
-  return await Promise.all<WriteStream>(
-    medias.map(saveMedia).map(createPromise),
-  );
-};
+export const downloadMedias = async (urls: string[], extension: Extension) =>
+  await pipeline(
+    getDetails,
+    buildYoutubeStreams,
+    saveMedias,
+    convert(extension),
+    compressMedias,
+  )(urls);

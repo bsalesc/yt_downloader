@@ -72,3 +72,15 @@ const asyncFilter = async (array: any[], filter: any): Promise<IMedia[]> => {
 
 export const filterNewMedias = async array =>
   await asyncFilter(array, checkMediaExist);
+
+const saveMedia = (media: IMedia) => media.stream.pipe(buildWriteStream(media));
+
+const createPromise = (stream: WriteStream): Promise<WriteStream> =>
+  new Promise(resolve => stream.on('finish', () => resolve(stream)));
+
+export const saveMedias = async (medias: IMedia[]): Promise<IMedia[]> => {
+  const newMedias = await filterNewMedias(medias);
+  await Promise.all<WriteStream>(newMedias.map(saveMedia).map(createPromise));
+
+  return medias;
+};
