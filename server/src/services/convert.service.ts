@@ -1,6 +1,6 @@
 import * as ffmpeg from 'fluent-ffmpeg';
-import { IMedia } from '../types/media.interface';
 import { buildPathFile, filterNewMedias } from './file.service';
+import { IMedia } from '../types/media.interface';
 import { Extension } from '../types/media.types';
 
 const convertToMP3 = async (medias: IMedia[]): Promise<IMedia[]> => {

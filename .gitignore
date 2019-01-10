@@ -2,3 +2,5 @@ node_modules
 server/node_modules
 server/downloads/*
 !server/downloads/.gitempty
+client/node_modules
+client/dist

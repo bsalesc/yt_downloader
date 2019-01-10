@@ -1,7 +1,6 @@
 {
-  "name": "shopping-list-api",
+  "name": "api",
   "version": "1.0.0",
-  "main": "server.js",
   "author": "Bruno Sales Cardoso",
   "license": "MIT",
   "scripts": {
