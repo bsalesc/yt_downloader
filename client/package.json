@@ -5,11 +5,11 @@
   "license": "MIT",
   "scripts": {
     "build": "./node_modules/.bin/webpack",
-    "start": "npm run build && node server.js"
+    "start": "set NODE_ENV=dev& ./node_modules/.bin/webpack-dev-server"
   },
   "dependencies": {
-    "react": "^16.7.0",
-    "react-dom": "^16.7.0",
+    "react": "^16.8.0-alpha.0",
+    "react-dom": "^16.8.0-alpha.0",
     "typescript": "^3.2.2"
   },
   "devDependencies": {
@@ -22,6 +22,7 @@
     "webpack": "^4.28.1",
     "webpack-cli": "^3.2.1",
     "webpack-dev-middleware": "^3.5.0",
+    "webpack-dev-server": "^3.1.14",
     "webpack-hot-middleware": "^2.24.3"
   }
 }
