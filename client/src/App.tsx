@@ -1,9 +1,9 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { Welcome } from './components/Welcome';
+import { Main } from './components/Main';
 
 declare let module: any;
 
-ReactDOM.render(<Welcome />, document.getElementById('root'));
+ReactDOM.render(<Main />, document.getElementById('root'));
 
 if (module.hot) module.hot.accept();
