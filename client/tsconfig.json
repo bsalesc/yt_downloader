@@ -1,14 +1,16 @@
 {
   "compilerOptions": {
-    "allowSyntheticDefaultImports": true,
     "jsx": "react",
-    "module": "commonjs",
-    "noImplicitAny": true,
-    "outDir": "./build/",
+    "target": "es5",
+    "moduleResolution": "node",
+    "module": "esnext",
+    "strict": true,
+    "importHelpers": true,
     "preserveConstEnums": true,
-    "removeComments": true,
+    "noImplicitAny": true,
     "sourceMap": true,
-    "target": "es5"
+    "allowSyntheticDefaultImports": true,
+    "lib": ["dom", "es5", "es2015.promise"]
   },
   "include": ["./src/**/*"]
 }
