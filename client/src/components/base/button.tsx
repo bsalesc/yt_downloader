@@ -13,8 +13,14 @@ const Button = styled.button`
     opacity: 0.5;
   }
 
+  &:focus {
+    outline: none;
+  }
   &:hover {
     filter: brightness(1.15);
+  }
+  &:active {
+    filter: brightness(0.75);
   }
 `;
 
