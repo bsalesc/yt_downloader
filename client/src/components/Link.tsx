@@ -1,36 +1,39 @@
 import React, { useState } from 'react';
 import { ILink } from '../types';
-import { Button } from './base/button';
-import { Input } from './base/input';
-import { DivCenterSpaceBetween } from './base/div';
+import { ButtonPrimary, ButtonSecondary } from './base/button';
+import { Input100Width } from './base/input';
+import { DivResponsive } from './base/div';
+
+import { FaPlusCircle, FaMinusCircle } from 'react-icons/fa';
 
 interface Props {
   link: ILink;
   hasRemoveBtn: boolean;
+  hasAddBtn: boolean;
   handleAddClick: () => void;
   handleRemoveClick: () => void;
   handleChange: (url: string) => void;
 }
 
-const styles = {
-  minWidth: '300px',
-};
+export const Link = React.memo(
+  ({ link: { url }, hasRemoveBtn, hasAddBtn, handleAddClick, handleRemoveClick, handleChange }: Props) => {
+    const [link, setLink] = useState(url);
 
-export const Link = ({ link: { url }, hasRemoveBtn, handleAddClick, handleRemoveClick, handleChange }: Props) => {
-  const [link, setLink] = useState(url);
-
-  return (
-    <DivCenterSpaceBetween style={styles}>
-      <Input
-        type='text'
-        value={link}
-        onChange={({ target: { value = '' } }) => setLink(value)}
-        onBlur={({ target: { value = '' } }) => handleChange(value)}
-      />
-      <Button onClick={handleAddClick}>+</Button>
-      <Button onClick={handleRemoveClick} disabled={!hasRemoveBtn}>
-        -
-      </Button>
-    </DivCenterSpaceBetween>
-  );
-};
+    return (
+      <DivResponsive>
+        <Input100Width
+          type='text'
+          value={link}
+          onChange={({ target: { value = '' } }) => setLink(value)}
+          onBlur={({ target: { value = '' } }) => handleChange(value)}
+        />
+        <ButtonPrimary onClick={handleAddClick} disabled={!hasAddBtn}>
+          <FaPlusCircle />
+        </ButtonPrimary>
+        <ButtonSecondary onClick={handleRemoveClick} disabled={!hasRemoveBtn}>
+          <FaMinusCircle />
+        </ButtonSecondary>
+      </DivResponsive>
+    );
+  },
+);

@@ -10,7 +10,7 @@
     "noImplicitAny": true,
     "sourceMap": true,
     "allowSyntheticDefaultImports": true,
-    "lib": ["dom", "es6", "es2015.promise"]
+    "lib": ["dom", "es7", "es2015.promise"]
   },
   "include": ["./src/**/*"]
 }
