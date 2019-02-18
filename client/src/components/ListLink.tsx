@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 
-import { DivColumnCenter, DivResponsive } from './base/div';
+import { DivColumnCenter } from './base/div';
 import { Link } from './Link';
 import { IListLink } from '../types';
 import { Actions } from './Actions';
+import { downloadVideos } from '../utils';
 
 export const ListLink = React.memo(() => {
   const [links, setLinks] = useState<IListLink>({ 0: '' });
   const linksKey = Object.keys(links).map(index => parseInt(index, 10));
+  const urls = linksKey.map(key => links[key]).filter(link => link.trim() !== '');
   const lastIndex = linksKey[linksKey.length - 1];
 
   const removeLink = (indexToRemove: number) => () => {
@@ -15,11 +17,8 @@ export const ListLink = React.memo(() => {
     delete newLinks[indexToRemove];
     setLinks(newLinks);
   };
+  const handleDownload = () => downloadVideos(urls);
   const changeLink = (index: number) => (url: string) => setLinks(Object.assign({}, links, { [index]: url }));
-  const handleDownload = async () => {
-    const urls = linksKey.map(link => links[link]);
-    const files = await fetch('http://localhost:8001/download/mp3', { method: 'POST', body: JSON.stringify(urls) });
-  };
   const handleClearList = () => {
     const newLinks = { ...links };
     linksKey.forEach((index: any) => (index === 0 ? (newLinks[index] = '') : delete newLinks[index]));
@@ -40,7 +39,11 @@ export const ListLink = React.memo(() => {
             handleRemoveClick={removeLink(index)}
           />
         ))}
-        <Actions handleDownload={handleDownload} handleClearList={handleClearList} />
+        <Actions
+          downloadDisabled={urls.length === 0}
+          handleDownload={handleDownload}
+          handleClearList={handleClearList}
+        />
       </DivColumnCenter>
     </>
   );

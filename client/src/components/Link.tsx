@@ -14,30 +14,25 @@ interface Props {
   handleChange: (url: string) => void;
 }
 
-export const Link = ({
-  link: url,
-  hasRemoveBtn,
-  hasAddBtn,
-  handleAddClick,
-  handleRemoveClick,
-  handleChange,
-}: Props) => {
-  const [link, setLink] = useState(url);
+export const Link = React.memo(
+  ({ link: url, hasRemoveBtn, hasAddBtn, handleAddClick, handleRemoveClick, handleChange }: Props) => {
+    const [link, setLink] = useState(url);
 
-  return (
-    <DivResponsive>
-      <Input100Width
-        type='text'
-        value={link}
-        onChange={({ target: { value = '' } }) => setLink(value)}
-        onBlur={({ target: { value = '' } }) => handleChange(value)}
-      />
-      <ButtonPrimary onClick={handleAddClick} disabled={!hasAddBtn}>
-        <FaPlusCircle />
-      </ButtonPrimary>
-      <ButtonSecondary onClick={handleRemoveClick} disabled={!hasRemoveBtn}>
-        <FaMinusCircle />
-      </ButtonSecondary>
-    </DivResponsive>
-  );
-};
+    return (
+      <DivResponsive>
+        <Input100Width
+          type='text'
+          value={link}
+          onChange={({ target: { value = '' } }) => setLink(value)}
+          onBlur={({ target: { value = '' } }) => handleChange(value)}
+        />
+        <ButtonPrimary onClick={handleAddClick} disabled={!hasAddBtn}>
+          <FaPlusCircle />
+        </ButtonPrimary>
+        <ButtonSecondary onClick={handleRemoveClick} disabled={!hasRemoveBtn}>
+          <FaMinusCircle />
+        </ButtonSecondary>
+      </DivResponsive>
+    );
+  },
+);

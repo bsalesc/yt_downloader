@@ -12,13 +12,14 @@ const styles = {
 };
 
 interface Props {
+  downloadDisabled: boolean;
   handleDownload: () => void;
   handleClearList: () => void;
 }
 
-export const Actions = React.memo(({ handleDownload, handleClearList }: Props) => (
+export const Actions = React.memo(({ downloadDisabled, handleDownload, handleClearList }: Props) => (
   <DivResponsive style={styles.div}>
-    <ButtonPrimary onClick={handleDownload} style={styles.button}>
+    <ButtonPrimary onClick={handleDownload} style={styles.button} disabled={downloadDisabled}>
       <Span>
         Download .mp3 <FaDownload style={styles.icon} />
       </Span>

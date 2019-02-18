@@ -11,6 +11,11 @@ export const download = async (req: Request, res: Response) => {
   const extension = Extension[extensionValue.toUpperCase()] as Extension;
 
   try {
+    res.setHeader('Content-Type', 'application/octet-stream');
+    // res.setHeader('Content-Length', '3006868');
+    res.setHeader('Content-Disposition', 'attachmen');
+    res.setHeader('Content-Transfer-Encoding', 'binary');
+
     if (!extension) throw Error('Invalid extension');
 
     const zippedFile = await downloadMedias(urls, extension);
