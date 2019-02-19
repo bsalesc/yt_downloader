@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 
 import { DivColumnCenter } from './base/div';
 import { Link } from './Link';
-import { IListLink } from '../types';
 import { Actions } from './Actions';
+
+import { useLinksState } from '../states/links';
 import { downloadVideos } from '../utils';
 
 export const ListLink = React.memo(() => {
-  const [links, setLinks] = useState<IListLink>({ 0: '' });
+  const [links, setLinks] = useLinksState();
   const linksKey = Object.keys(links).map(index => parseInt(index, 10));
   const urls = linksKey.map(key => links[key]).filter(link => link.trim() !== '');
   const lastIndex = linksKey[linksKey.length - 1];
